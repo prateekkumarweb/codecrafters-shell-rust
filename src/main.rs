@@ -9,6 +9,11 @@ fn main() {
         input.clear();
         stdin.read_line(&mut input).unwrap();
         let trimmed = input.trim();
+        if trimmed.starts_with("exit") {
+            let code = trimmed.splitn(2, " ");
+            let code = code.last().unwrap().parse::<i32>().unwrap();
+            std::process::exit(code);
+        }
         if !trimmed.is_empty() {
             println!("{}: command not found", trimmed)
         };
