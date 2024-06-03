@@ -35,7 +35,7 @@ fn main() {
         let Some(command) = command else {
             continue;
         };
-        let builtins = ["echo", "exit", "type"];
+        let builtins = ["echo", "exit", "pwd", "type"];
         match command {
             "exit" => {
                 let code = splits.next().unwrap();
@@ -55,6 +55,10 @@ fn main() {
                 } else {
                     println!("{} not found", command);
                 }
+            }
+            "pwd" => {
+                let cwd = std::env::current_dir().unwrap();
+                println!("{}", cwd.display());
             }
             command => {
                 if let Some(p) = execs.get(command) {
