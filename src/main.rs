@@ -64,6 +64,11 @@ fn main() {
             }
             "cd" => {
                 let new_cwd = std::path::PathBuf::from(splits.next().unwrap());
+                let new_cwd_display = new_cwd.display().to_string();
+                let Ok(new_cwd) = fs::canonicalize(new_cwd) else {
+                    println!("cd: {}: No such file or directory", new_cwd_display);
+                    continue;
+                };
                 if new_cwd.is_dir() {
                     cwd = new_cwd;
                     std::env::set_current_dir(&cwd).unwrap();
