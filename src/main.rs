@@ -57,7 +57,13 @@ fn main() {
                 }
             }
             command => {
-                println!("{}: command not found", command)
+                if let Some(p) = execs.get(command) {
+                    let args = splits.collect::<Vec<&str>>();
+                    let mut handle = std::process::Command::new(p).args(&args).spawn().unwrap();
+                    handle.wait().unwrap();
+                } else {
+                    println!("{}: command not found", command);
+                }
             }
         }
     }
