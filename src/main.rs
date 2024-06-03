@@ -21,6 +21,10 @@ fn main() {
         })
         .collect::<HashMap<_, _>>();
 
+    let builtins = ["echo", "exit", "pwd", "cd", "type"];
+
+    let mut cwd = std::env::current_dir().unwrap();
+
     loop {
         print!("$ ");
         io::stdout().flush().unwrap();
@@ -35,7 +39,6 @@ fn main() {
         let Some(command) = command else {
             continue;
         };
-        let builtins = ["echo", "exit", "pwd", "type"];
         match command {
             "exit" => {
                 let code = splits.next().unwrap();
@@ -57,8 +60,16 @@ fn main() {
                 }
             }
             "pwd" => {
-                let cwd = std::env::current_dir().unwrap();
                 println!("{}", cwd.display());
+            }
+            "cd" => {
+                let new_cwd = std::path::PathBuf::from(splits.next().unwrap());
+                if new_cwd.is_dir() {
+                    cwd = new_cwd;
+                    std::env::set_current_dir(&cwd).unwrap();
+                } else {
+                    println!("cd: {}: No such file or directory", new_cwd.display());
+                }
             }
             command => {
                 if let Some(p) = execs.get(command) {
