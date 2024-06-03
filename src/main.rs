@@ -8,7 +8,7 @@ fn main() {
     let stdin = io::stdin();
     let mut input = String::new();
 
-    let path_env = std::env::var("PATH").unwrap_or("".to_string());
+    let path_env = env!("PATH");
     let paths = path_env.split(':');
 
     let execs = paths
