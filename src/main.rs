@@ -17,6 +17,7 @@ fn main() {
         let Some(command) = command else {
             continue;
         };
+        let builtins = ["echo", "exit", "type"];
         match command {
             "exit" => {
                 let code = splits.next().unwrap();
@@ -26,6 +27,14 @@ fn main() {
             "echo" => {
                 let args = splits.collect::<Vec<&str>>().join(" ");
                 println!("{}", args);
+            }
+            "type" => {
+                let command = splits.next().unwrap();
+                if builtins.contains(&command) {
+                    println!("{} is a shell builtin", command);
+                } else {
+                    println!("{} not found", command);
+                }
             }
             command => {
                 println!("{}: command not found", command)
